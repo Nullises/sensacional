@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var logFmt = require('logfmt');
 var morgan = require('morgan');
 var routes = require('./routes/index.js');
+var cons = require('consolidate');
 
 //Definir puerto:
 var server_port = process.env.PORT || 3000;
@@ -15,10 +16,10 @@ var server_port = process.env.PORT || 3000;
 //Definir aplicación:
 var app = express();
 
-//Definir motor de templates:
+//Definir motor de vistas
+app.engine('html', cons.swig)
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
+app.set('view engine', 'html');
 
 //Definir carpetas estáticas a usar:
 app.use(express.static(path.join(__dirname, 'public')));

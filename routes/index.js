@@ -4,7 +4,7 @@ var models = require('../server/models/index');
 
 //Pagina inicial
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index.html', { title: 'Express' });
 });
 
 //Obtener todos los productos

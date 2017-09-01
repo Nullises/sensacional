@@ -1,0 +1,8 @@
+{
+  "version": "0.0.1",
+  "name": "SensacionalApp",
+  "dependencies": {
+    "angular-advanced-searchbox": "^3.0.0"
+  },
+  "devDependencies": {}
+}
