@@ -17,6 +17,7 @@
 5. Dentro de server correr
 
 `sequelize db:migrate` //Migrar la DB
+
 `sequelize db:seed:all` //Poblar la DB
 
 6. Correr la app
