@@ -17,6 +17,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
+      brand: {
+        type: Sequelize.STRING
+      },
       price_ref: {
         type: Sequelize.DOUBLE
       },
