@@ -18,3 +18,7 @@
 
 `sequelize db:migrate` //Migrar la DB
 `sequelize db:seed:all` //Poblar la DB
+
+6. Correr la app
+
+`npm start`
