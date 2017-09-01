@@ -3,7 +3,6 @@
  1. Instalar paquetes requeridos:
 
  `sudo npm install`
- `bower install`
 
  2. Instalar Globalmente Sequelize-CLI:
 
