@@ -1,1 +1,8 @@
-angular.module('SensacionalApp', ['ngMaterial']);
+(function(){
+  'use strict';
+
+  angular.module('SensacionalApp', [
+    'ngMaterial',
+    'ngAria'
+  ]);
+})();
