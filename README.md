@@ -12,5 +12,8 @@
 
  `sudo npm install -g pg@6.4.1 pg-hstore `
 
-
 4. Cambiar variables locales de la DB en `\server\config`
+
+5. Dentro de server correr
+
+`sequelize db:migrate`
