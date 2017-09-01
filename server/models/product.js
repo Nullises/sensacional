@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Product = sequelize.define('Product', {
-    sku: DataTypes.INTEGER,
+    sku: DataTypes.STRING,
     img: DataTypes.STRING,
     name: DataTypes.STRING,
     price_ref: DataTypes.DOUBLE,
