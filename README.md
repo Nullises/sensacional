@@ -14,12 +14,12 @@
 
 4. Cambiar variables locales de la DB en `\server\config`
 
-5. Dentro de server correr
+5. Dentro de /server correr
 
 `sequelize db:migrate` //Migrar la DB
 
 `sequelize db:seed:all` //Poblar la DB
 
-6. Correr la app
+6. Correr la app en raíz (/sensacional)
 
 `npm start`
