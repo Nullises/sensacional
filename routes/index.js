@@ -14,6 +14,54 @@ router.get('/getAll', function(req, res){
   });
 });
 
+//Obtener todos los productos (OR)
+router.get('/getProductOr/:condition/:brand/:name/:categories', function(req, res){
+  models.product.findAll({
+    where: {
+      $or: [
+        {
+          condition: req.params.condition
+        },
+        {
+          brand: req.params.brand
+        },
+        {
+          name: req.params.name
+        },
+        {
+          categories: req.params.categories
+        }
+      ]
+    }
+  }).then(function(getProductOr){
+    res.json(getProductOr);
+  });
+});
+
+//Obtener todos los productos (AND)
+router.get('/getProductAnd/:condition/:brand/:name/:categories', function(req, res){
+  models.product.findAll({
+    where: {
+      $and: [
+        {
+          condition: req.params.condition
+        },
+        {
+          brand: req.params.brand
+        },
+        {
+          name: req.params.name
+        },
+        {
+          categories: req.params.categories
+        }
+      ]
+    }
+  }).then(function(getProductAnd){
+    res.json(getProductAnd);
+  })
+});
+
 //Comprobar conexión a DB
 models.sequelize.authenticate().then(function(err) {
     console.log('La conexión a Base de Datos se ha establecido correctamente');
