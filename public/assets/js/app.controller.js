@@ -5,9 +5,9 @@
         .module('SensacionalApp')
         .controller('SensacionalController', SensacionalController);
 
-    SensacionalController.$inject = ['$scope'];
+    SensacionalController.$inject = ['$scope', 'getAll'];
 
-    function SensacionalController ($scope) {
+    function SensacionalController ($scope, getAll) {
 
         //key, param a usar en el ng-model
         $scope.availableSearchParams = [
@@ -22,5 +22,11 @@
           //Objeto key/value con todos los parámetros de búsqueda
           console.log(model);
         });
+
+        //Toda la data (asíncrona)
+        getAll.respuesta().then(function(data){
+          console.log(data.data);
+        });
+
     }
 })();
