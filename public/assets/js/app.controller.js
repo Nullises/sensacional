@@ -5,27 +5,50 @@
         .module('SensacionalApp')
         .controller('SensacionalController', SensacionalController);
 
-    SensacionalController.$inject = ['$scope', 'getAll'];
+    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr'];
 
-    function SensacionalController ($scope, getAll) {
+    function SensacionalController ($scope, $timeout, getAll, getProductOr) {
 
-        //key, param a usar en el ng-model
-        $scope.availableSearchParams = [
-          { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto" },
-          { key: "brand", name: "Marca", placeholder: "Marca" },
-          { key: "condition", name: "Condición", placeholder: "Condición"},
-          { key: "categories", name: "Categorias", placeholder: "Categorias"},
-        ];
+        //Toda la data (asíncrona)
+        getAll.respuesta().then(function(data){
+          let allData = data.data;
+
+          let mapBrand = allData.map(function(x){
+            return x.brand;
+          });
+
+          let mapNames = allData.map(function(x){
+            return x.name;
+          })
+
+          let mapCategories = allData.map(function(x){
+            return x.categories;
+          })
+
+          let mapCondition = allData.map(function(x){
+            return x.condition;
+          })
+
+          //key, param a usar en el ng-model
+          $scope.availableSearchParams = [
+            { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto", restrictToSuggestedValues: true, suggestedValues: mapNames},
+            { key: "brand", name: "Marca", placeholder: "Marca", restrictToSuggestedValues: true, suggestedValues: mapBrand },
+            { key: "condition", name: "Condición", placeholder: "Condición", restrictToSuggestedValues: true, suggestedValues: mapCondition},
+            { key: "categories", name: "Categorias", placeholder: "Categorias", restrictToSuggestedValues: true, suggestedValues: mapCategories},
+          ];
+
+        });
 
         //Función que captura todo del advanced-searchbox
         $scope.$on('advanced-searchbox:modelUpdated', function (event, model) {
           //Objeto key/value con todos los parámetros de búsqueda
-          console.log(model);
-        });
+          //console.log(model);
 
-        //Toda la data (asíncrona)
-        getAll.respuesta().then(function(data){
-          console.log(data.data);
+          getProductOr.respuesta(model.condition, model.brand, model.name, model.categories)
+          .then(function(data){
+            console.log(data.data);
+          });
+
         });
 
     }
