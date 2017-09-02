@@ -24,6 +24,7 @@ app.set('view engine', 'html');
 //Definir carpetas estáticas a usar:
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname + '/node_modules'));
+app.use(express.static(__dirname + '/bower_components'));
 
 
 

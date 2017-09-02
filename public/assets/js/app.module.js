@@ -3,6 +3,7 @@
 
   angular.module('SensacionalApp', [
     'ngMaterial',
-    'ngAria'
+    'ngAria',
+    'angular-advanced-searchbox'
   ]);
 })();

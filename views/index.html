@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>APPSENSACIONAL</title>
     <link rel="stylesheet" href="angular-material/angular-material.min.css">
+    <link rel="stylesheet" href="angular-advanced-searchbox/dist/angular-advanced-searchbox.min.css">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">
     <!--SENSACIONAL FAVICON-->
     <link rel="apple-touch-icon" sizes="57x57" href="assets/img/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="assets/img/favicon/apple-icon-60x60.png">
@@ -26,8 +28,24 @@
     <!--SENSACIONAL FAVICON-->
   </head>
   <body ng-app="SensacionalApp">
-    <p>OLA</p>
+
+    <div layout="column" ng-controller="SensacionalController">
+      <md-toolbar class="md-warn" layout-align="center center">
+        <h2 class="md-flex text-center">App Sensacional</h2>
+      </md-toolbar>
+      <md-content flex layout-padding layout-align="center center">
+        <nit-advanced-searchbox
+	      ng-model="searchParams"
+	      parameters="availableSearchParams"
+	      placeholder="Buscar..."
+        >
+        </nit-advanced-searchbox>
+      </md-content>
+    </div>
+
     <!--ANGULAR MATERIAL DEPENDENCIAS-->
+    <script src="jquery/dist/jquery.min.js"></script>
+    <script src="bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="angular/angular.min.js"></script>
     <script src="angular-animate/angular-animate.min.js"></script>
     <script src="angular-aria/angular-aria.min.js"></script>
@@ -35,7 +53,10 @@
     <script src="angular-ui-router/release/angular-ui-router.min.js"></script>
     <!--ANGULAR MATERIAL-->
     <script src="angular-material/angular-material.min.js"></script>
+    <!--ADVANCED SEARCH-->
+    <script src="angular-advanced-searchbox/dist/angular-advanced-searchbox-tpls.min.js"></script>
     <!--ASSETS-->
     <script src="assets/js/app.module.js"></script>
+    <script src="assets/js/app.controller.js"></script>
   </body>
 </html>
