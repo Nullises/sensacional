@@ -25,15 +25,11 @@
             return x.categories;
           })
 
-          let mapCondition = allData.map(function(x){
-            return x.condition;
-          })
-
           //key, param a usar en el ng-model
           $scope.availableSearchParams = [
             { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto", restrictToSuggestedValues: true, suggestedValues: mapNames},
             { key: "brand", name: "Marca", placeholder: "Marca", restrictToSuggestedValues: true, suggestedValues: mapBrand },
-            { key: "condition", name: "Condición", placeholder: "Condición", restrictToSuggestedValues: true, suggestedValues: mapCondition},
+            { key: "condition", name: "Condición", placeholder: "Condición"},
             { key: "categories", name: "Categorias", placeholder: "Categorias", restrictToSuggestedValues: true, suggestedValues: mapCategories},
           ];
 

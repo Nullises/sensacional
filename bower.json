@@ -2,7 +2,8 @@
   "version": "0.0.1",
   "name": "SensacionalApp",
   "dependencies": {
-    "angular-advanced-searchbox": "^3.0.0"
+    "angular-advanced-searchbox": "^3.0.0",
+    "angular-material-data-table": "^0.10.10"
   },
   "devDependencies": {}
 }
