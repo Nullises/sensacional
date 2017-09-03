@@ -13,6 +13,7 @@
         getAll.respuesta().then(function(data){
           let allData = data.data;
 
+          //Mapear Data
           let mapBrand = allData.map(function(x){
             return x.brand;
           });
@@ -25,12 +26,37 @@
             return x.categories;
           })
 
+          let mapCondition = allData.map(function(x){
+            return x.condition;
+          })
+
+          //Filtrar (Evitar Duplicados)
+          let uniqueBrands = [];
+          $.each(mapBrand, function(i, el){
+            if($.inArray(el, uniqueBrands) === -1) uniqueBrands.push(el);
+          });
+
+          let uniqueNames = [];
+          $.each(mapNames, function(i, el){
+            if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+          });
+
+          let uniqueCategories = [];
+          $.each(mapCategories, function(i, el){
+            if($.inArray(el, uniqueCategories) === -1) uniqueCategories.push(el);
+          });
+
+          let uniqueCondition = [];
+          $.each(mapCondition, function(i, el){
+            if($.inArray(el, uniqueCondition) === -1) uniqueCondition.push(el);
+          });
+
           //key, param a usar en el ng-model
           $scope.availableSearchParams = [
-            { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto", restrictToSuggestedValues: true, suggestedValues: mapNames},
-            { key: "brand", name: "Marca", placeholder: "Marca", restrictToSuggestedValues: true, suggestedValues: mapBrand },
-            { key: "condition", name: "Condición", placeholder: "Condición"},
-            { key: "categories", name: "Categorias", placeholder: "Categorias", restrictToSuggestedValues: true, suggestedValues: mapCategories},
+            { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto", restrictToSuggestedValues: true, suggestedValues: uniqueNames},
+            { key: "brand", name: "Marca", placeholder: "Marca", restrictToSuggestedValues: true, suggestedValues: uniqueBrands },
+            { key: "condition", name: "Condición", placeholder: "Condición", restrictToSuggestedValues: true, suggestedValues: uniqueCondition},
+            { key: "categories", name: "Categorias", placeholder: "Categorias", restrictToSuggestedValues: true, suggestedValues: uniqueCategories},
           ];
 
         });
@@ -74,7 +100,7 @@
               "language": {
                   "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
               },
-              buttons: [ 'excel'],
+              buttons: [ 'excel', 'pdf'],
               "columns":[
                 {"data": "url_miniature", render: function(url, type, full){return '<img src="http://www.sensacional.cl/media/catalog/product/cache/1/thumbnail/65x/040ec09b1e35df139433887a97daa66f'+full.img+'"/>';}},
                 {"data": "sku"},
