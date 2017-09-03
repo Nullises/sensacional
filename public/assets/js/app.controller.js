@@ -44,21 +44,26 @@
             getProductAnd.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
               fillTable(data.data);
+              fillChart(data.data);
             });
           }else{
             getProductOr.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
               fillTable(data.data);
+              fillChart(data.data);
             });
           }
 
         });
 
+        //Función que renderiza el gráfico
+        function fillChart(data){
+          console.log(data);
+        }
+
 
         //Función que renderiza la Tabla
         function fillTable(data){
-          console.log(data);
-
           $document.ready(function(){
             $('#sensacional_table').DataTable({
               data: data,
@@ -71,7 +76,7 @@
               },
               buttons: [ 'excel'],
               "columns":[
-                {"data": "url_miniature"},
+                {"data": "url_miniature", render: function(url, type, full){return '<img src="http://www.sensacional.cl/media/catalog/product/cache/1/thumbnail/65x/040ec09b1e35df139433887a97daa66f'+full.img+'"/>';}},
                 {"data": "sku"},
                 {"data": "name"},
                 {"data": "condition"},

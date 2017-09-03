@@ -45,6 +45,11 @@
         >
         </nit-advanced-searchbox>
         <br><br>
+        <!--GRAFICO-->
+        <div class="row">
+            <highchart chart='{{renderChart}}' id="grafico" ng-init="addSeries()"></highchart>
+        </div>
+        <br><br>
         <div class="table-responsive">
           <table class="mdl-data-table" cellspacing="0" width="100%" id="sensacional_table" style="margin-top: 2%;">
             <thead>
@@ -89,6 +94,7 @@
     <!--ASSETS-->
     <script src="assets/js/app.module.js"></script>
     <script src="assets/js/getAll.service.js"></script>
+    <script src="assets/js/chart.directive.js"></script>
     <script src="assets/js/getProductOr.service.js"></script>
     <script src="assets/js/getProductAnd.service.js"></script>
     <script src="assets/js/app.controller.js"></script>
