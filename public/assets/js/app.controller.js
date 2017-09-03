@@ -30,7 +30,7 @@
             return x.condition;
           })
 
-          //Filtrar (Evitar Duplicados)
+          //Filtrar (Evitar duplicados solo para dropdown de valores sugeridos)
           let uniqueBrands = [];
           $.each(mapBrand, function(i, el){
             if($.inArray(el, uniqueBrands) === -1) uniqueBrands.push(el);
@@ -51,7 +51,7 @@
             if($.inArray(el, uniqueCondition) === -1) uniqueCondition.push(el);
           });
 
-          //key, param a usar en el ng-model
+          //Parámetros de Búsqueda
           $scope.availableSearchParams = [
             { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto", restrictToSuggestedValues: true, suggestedValues: uniqueNames},
             { key: "brand", name: "Marca", placeholder: "Marca", restrictToSuggestedValues: true, suggestedValues: uniqueBrands },
@@ -91,7 +91,6 @@
         //Función que renderiza la Tabla
         function fillTable(data){
           $document.ready(function(){
-
             //Tabla
             var table = $('#sensacional_table').DataTable({
               data: data,
@@ -112,7 +111,6 @@
                 {"data": "status", render: function(data, type, row){if(data==true){return 'Sí'}else{return 'No'}}}
               ],
             });
-
             //Búsqueda Individual (Filtro x Columna)
             $("#sensacional_table tfoot th").each( function ( i ) {
                 var select = $('<select><option value=""></option></select>')
