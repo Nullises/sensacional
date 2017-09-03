@@ -6,6 +6,5 @@
     'ngAria',
     'ui.bootstrap',
     'angular-advanced-searchbox',
-    'md.data.table'
   ])
 })();
