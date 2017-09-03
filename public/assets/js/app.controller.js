@@ -5,9 +5,9 @@
         .module('SensacionalApp')
         .controller('SensacionalController', SensacionalController);
 
-    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr'];
+    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr', 'getProductAnd'];
 
-    function SensacionalController ($scope, $timeout, getAll, getProductOr) {
+    function SensacionalController ($scope, $timeout, getAll, getProductOr, getProductAnd) {
 
         //Toda la data (asíncrona)
         getAll.respuesta().then(function(data){
@@ -42,10 +42,20 @@
 
           //$scope.products = [];
 
-          getProductOr.respuesta(model.condition, model.brand, model.name, model.categories)
-          .then(function(data){
-            console.log(data.data);
-          });
+
+          if(model.condition != undefined && model.brand != undefined && model.name != undefined && model.categories != undefined){
+            var str = model.categories
+            var replaceSlash = str.replace(/\//g, "%2F")
+            getProductAnd.respuesta(model.condition, model.brand, model.name, replaceSlash)
+            .then(function(data){
+              console.log(data.data);
+            });
+          }else{
+            getProductOr.respuesta(model.condition, model.brand, model.name, replaceSlash)
+            .then(function(data){
+              console.log(data.data);
+            });
+          }
 
         });
 
