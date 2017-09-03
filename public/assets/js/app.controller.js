@@ -35,19 +35,16 @@
 
         });
 
-        $scope.selected = [];
-
         //Función que captura todo del advanced-searchbox
         $scope.$on('advanced-searchbox:modelUpdated', function (event, model) {
           //Objeto key/value con todos los parámetros de búsqueda
           //console.log(model);
 
-          $scope.products = [];
+          //$scope.products = [];
 
           getProductOr.respuesta(model.condition, model.brand, model.name, model.categories)
           .then(function(data){
             console.log(data.data);
-            $scope.products.push(data.data);
           });
 
         });
