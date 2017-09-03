@@ -35,7 +35,7 @@
 
         });
 
-        //Función que captura todo del advanced-searchbox
+        //Función que captura todo del advanced-searchbox (y lo recarga)
         $scope.$on('advanced-searchbox:modelUpdated', function (event, model) {
 
           if(model.condition != undefined && model.brand != undefined && model.name != undefined && model.categories != undefined){
@@ -54,6 +54,8 @@
 
         });
 
+
+        //Función que renderiza la Tabla
         function fillTable(data){
           console.log(data);
 
@@ -63,6 +65,7 @@
               dom: 'Bfrtip',
               destroy: true,
               searching: false,
+              "order": [[ 5, "desc" ]], //Ordenado por Precio de Venta (descendente)
               "language": {
                   "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
               },
