@@ -5,9 +5,9 @@
         .module('SensacionalApp')
         .controller('SensacionalController', SensacionalController);
 
-    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr', 'getProductAnd'];
+    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr', 'getProductAnd', '$document'];
 
-    function SensacionalController ($scope, $timeout, getAll, getProductOr, getProductAnd) {
+    function SensacionalController ($scope, $timeout, getAll, getProductOr, getProductAnd, $document) {
 
         //Toda la data (asíncrona)
         getAll.respuesta().then(function(data){
@@ -37,27 +37,48 @@
 
         //Función que captura todo del advanced-searchbox
         $scope.$on('advanced-searchbox:modelUpdated', function (event, model) {
-          //Objeto key/value con todos los parámetros de búsqueda
-          //console.log(model);
-
-          //$scope.products = [];
-
 
           if(model.condition != undefined && model.brand != undefined && model.name != undefined && model.categories != undefined){
             var str = model.categories
             var replaceSlash = str.replace(/\//g, "%2F")
             getProductAnd.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
-              console.log(data.data);
+              fillTable(data.data);
             });
           }else{
             getProductOr.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
-              console.log(data.data);
+              fillTable(data.data);
             });
           }
 
         });
+
+        function fillTable(data){
+          console.log(data);
+
+          $document.ready(function(){
+            $('#sensacional_table').DataTable({
+              data: data,
+              dom: 'Bfrtip',
+              destroy: true,
+              searching: false,
+              "language": {
+                  "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+              },
+              buttons: [ 'excel'],
+              "columns":[
+                {"data": "url_miniature"},
+                {"data": "sku"},
+                {"data": "name"},
+                {"data": "condition"},
+                {"data": "price_ref", render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                {"data": "price", render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                {"data": "status", render: function(data, type, row){if(data==true){return 'Sí'}else{return 'No'}}}
+              ]
+            });
+          });
+        }
 
     }
 })();
