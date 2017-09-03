@@ -91,11 +91,12 @@
         //Función que renderiza la Tabla
         function fillTable(data){
           $document.ready(function(){
-            $('#sensacional_table').DataTable({
+
+            //Tabla
+            var table = $('#sensacional_table').DataTable({
               data: data,
               dom: 'Bfrtip',
               destroy: true,
-              searching: false,
               "order": [[ 5, "desc" ]], //Ordenado por Precio de Venta (descendente)
               "language": {
                   "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
@@ -109,8 +110,23 @@
                 {"data": "price_ref", render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
                 {"data": "price", render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
                 {"data": "status", render: function(data, type, row){if(data==true){return 'Sí'}else{return 'No'}}}
-              ]
+              ],
             });
+
+            //Búsqueda Individual (Filtro x Columna)
+            $("#sensacional_table tfoot th").each( function ( i ) {
+                var select = $('<select><option value=""></option></select>')
+                .appendTo( $(this).empty() )
+                .on( 'change', function () {
+                    table.column( i )
+                        .search( $(this).val() )
+                        .draw();
+                } );
+                table.column( i ).data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                });
+            });
+
           });
         }
 
