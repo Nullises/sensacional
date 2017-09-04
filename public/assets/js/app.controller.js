@@ -95,11 +95,22 @@
             }
           });
 
-          //Ranguear vendidos
+          //Redondear precio de vendidos
+          var roundPriceVendido = vendido.map(function(x){
+            let price = Math.round(x.price/1000)*1000
+            return price;
+          });
+
+          //Redondear precio de no vendidos
+          var roundPriceNoVendido = noVendido.map(function(x){
+            let price = Math.round(x.price/1000)*1000
+            return price;
+          });
 
           console.log('vendido', vendido);
           console.log('noVendido', noVendido);
-
+          console.log(roundPriceVendido);
+          console.log(roundPriceNoVendido);
         }
 
 
