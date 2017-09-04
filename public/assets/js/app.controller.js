@@ -83,20 +83,22 @@
         //Función que depura la data para el gráfico
         function purgeData(data){
 
-          var vendida = []; //verde
-          var noVendida = []; //rojo
+          var vendido = []; //verde
+          var noVendido = []; //rojo
 
           //Verificar si la data está vendida o no
           var mapQty = data.map(function(x){
             if(x.qty != 0){
-              vendida.push(x)
+              vendido.push(x)
             }else{
-              noVendida.push(x);
+              noVendido.push(x);
             }
           });
 
-          console.log('vendida', vendida);
-          console.log('noVendida', noVendida);
+          //Ranguear vendidos
+
+          console.log('vendido', vendido);
+          console.log('noVendido', noVendido);
 
         }
 
