@@ -107,10 +107,30 @@
             return price;
           });
 
+          //Buscar el mayor precio en vendidos
+          var largestVendidos = Math.max.apply(Math, roundPriceVendido);
+          //Buscar el mayor precio en no vendidos
+          var largestNoVendidos = Math.max.apply(Math, roundPriceNoVendido);
+
+          //Crear intervalo de vendidos (de 1000 en 1000)
+          var intervalVendidos = []
+          for(var i = 1000; i <= largestVendidos; i+= 1000){
+            intervalVendidos.push(i);
+          }
+
+          //Crear intervalo de no vendidos (de 1000 en 1000)
+          var intervalNoVendidos = []
+          for(var i = 1000; i <= largestNoVendidos; i+= 1000){
+            intervalNoVendidos.push(i);
+          }
+
+          var arraySeries = [];
+          
+
           console.log('vendido', vendido);
           console.log('noVendido', noVendido);
-          console.log(roundPriceVendido);
-          console.log(roundPriceNoVendido);
+          console.log(intervalVendidos);
+          console.log(intervalNoVendidos);
         }
 
 
