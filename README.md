@@ -4,6 +4,8 @@
 
  `sudo npm install`
 
+ `bower install`
+
  2. Instalar Globalmente Sequelize-CLI:
 
  `sudo npm install -g sequelize-cli`

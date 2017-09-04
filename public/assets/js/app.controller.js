@@ -69,21 +69,39 @@
             getProductAnd.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
               fillTable(data.data);
-              fillChart(data.data);
+              purgeData(data.data);
             });
           }else{
             getProductOr.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
               fillTable(data.data);
-              fillChart(data.data);
+              purgeData(data.data);
             });
           }
         });
 
-        //Función que renderiza el gráfico
-        function fillChart(data){
-          //console.log(data);
+        //Función que depura la data para el gráfico
+        function purgeData(data){
+
+          var vendida = []; //verde
+          var noVendida = []; //rojo
+
+          //Verificar si la data está vendida o no
+          var mapQty = data.map(function(x){
+            if(x.qty != 0){
+              vendida.push(x)
+            }else{
+              noVendida.push(x);
+            }
+          });
+
+          console.log('vendida', vendida);
+          console.log('noVendida', noVendida);
+
         }
+
+
+
 
 
         //Función que renderiza la Tabla
