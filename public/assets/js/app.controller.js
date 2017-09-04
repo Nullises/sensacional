@@ -63,7 +63,6 @@
 
         //Función que captura todo del advanced-searchbox (y lo recarga)
         $scope.$on('advanced-searchbox:modelUpdated', function (event, model) {
-
           if(model.condition != undefined && model.brand != undefined && model.name != undefined && model.categories != undefined){
             var str = model.categories
             var replaceSlash = str.replace(/\//g, "%2F")
@@ -79,12 +78,11 @@
               fillChart(data.data);
             });
           }
-
         });
 
         //Función que renderiza el gráfico
         function fillChart(data){
-          console.log(data);
+          //console.log(data);
         }
 
 

@@ -3,7 +3,9 @@
   "name": "SensacionalApp",
   "dependencies": {
     "angular-advanced-searchbox": "^3.0.0",
-    "angular-material-data-table": "^0.10.10"
+    "angular-material-data-table": "^0.10.10",
+    "angular-local-storage": "^0.7.1",
+    "ngstorage": "^0.3.11"
   },
   "devDependencies": {}
 }

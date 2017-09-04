@@ -5,6 +5,6 @@
     'ngMaterial',
     'ngAria',
     'ui.bootstrap',
-    'angular-advanced-searchbox',
+    'angular-advanced-searchbox'
   ])
 })();
