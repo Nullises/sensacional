@@ -83,31 +83,37 @@
         //Función que depura la data para el gráfico
         function purgeData(data){
 
-          var vendido = []; //verde
-          var noVendido = []; //rojo
+          var vendidoQty = []; //verde
+          var noVendidoQty = []; //rojo
 
           //Verificar si la data está vendida o no
           var mapQty = data.map(function(x){
             if(x.qty != 0){
-              vendido.push(x)
+              vendidoQty.push(x.qty)
             }else{
-              noVendido.push(x);
+              noVendidoQty.push(x.qty);
             }
           });
 
-          //Redondear precio de vendidos
-          var roundPriceVendido = vendido.map(function(x){
-            let price = Math.round(x.price/1000)*1000
-            return price;
+          var vendidoPrice = [];
+          var noVendidoPrice = [];
+
+
+          var mapPrice = data.map(function(x){
+            let p = Math.round(x.price/1000)*1000
+            if(p != 0){
+              vendidoPrice.push(p)
+            }else{
+              noVendidoPrice.push(p);
+            }
           });
 
-          //Redondear precio de no vendidos
-          var roundPriceNoVendido = noVendido.map(function(x){
-            let price = Math.round(x.price/1000)*1000
-            return price;
+          //Evitar duplicados en Categorias
+          var categories = vendidoPrice.concat(noVendidoPrice);
+          var uniqueCategories = [];
+          $.each(categories, function(i, el){
+              if($.inArray(el, uniqueCategories) === -1) uniqueCategories.push(el);
           });
-
-          console.log(roundPriceVendido);
 
           //Highcharts
           var chart = Highcharts.chart('container', {
@@ -115,6 +121,7 @@
             title: { text: 'Cantidad de Productos'},
             subtitle: { text: 'Vendidos y No Vendidos'},
             yAxis: { min: 0, title: { text: 'Cantidad'}},
+            xAxis: {categories: uniqueCategories},
             legend: {
                 enabled: true //Leyenda de cada serie
             },
@@ -128,45 +135,33 @@
                 downloadPDF: 'Descargar en PDF',
                 downloadSVG: 'Descargar en SVG',
                 contextButtonTitle: 'EXPORTAR'
-            }
+            },
+                plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function () {
+                                $('#miModal').modal();
+                            }
+                        }
+                    }
+                }
+            },
+            series: [
+              {
+                name: 'Vendidos',
+                data: vendidoQty,
+                color: '#4CAF50'
+              },
+              {
+                name: 'No Vendidos',
+                data: noVendidoQty,
+                color: '#F44336  '
+              }
+            ]
           });
-
-          //Añadir series dinámicamente
-          $('#container').ready(function(){
-            //Ciclo While para recargar el gráfico
-           while(chart.series.length > 0){
-               chart.series[0].remove(true);
-           }
-           for(var i = 0; i < vendido.length; i++){
-              //Añadir series
-              chart.addSeries({
-                  name: vendido[i].price + '$',
-                  data: [vendido[i].qty],
-                  color: '#4CAF50',
-                  allowPointSelect: true,
-                  pointRange: 100
-              });
-           }
-           for(var i = 0; i < noVendido.length; i++){
-              //Añadir series
-              chart.addSeries({
-                  name: noVendido[i].price + '$',
-                  data: [noVendido[i].qty],
-                  color: '#F44336',
-                  allowPointSelect: true,
-                  pointRange: 100
-              });
-           }
-          });
-
-
-          console.log('vendido', vendido);
-          console.log('noVendido', noVendido);
         }
-
-
-
-
 
         //Función que renderiza la Tabla
         function fillTable(data){
