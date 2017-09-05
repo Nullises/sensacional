@@ -107,30 +107,61 @@
             return price;
           });
 
-          //Buscar el mayor precio en vendidos
-          var largestVendidos = Math.max.apply(Math, roundPriceVendido);
-          //Buscar el mayor precio en no vendidos
-          var largestNoVendidos = Math.max.apply(Math, roundPriceNoVendido);
+          console.log(roundPriceVendido);
 
-          //Crear intervalo de vendidos (de 1000 en 1000)
-          var intervalVendidos = []
-          for(var i = 1000; i <= largestVendidos; i+= 1000){
-            intervalVendidos.push(i);
-          }
+          //Highcharts
+          var chart = Highcharts.chart('container', {
+            chart:{ type: 'column'},
+            title: { text: 'Cantidad de Productos'},
+            subtitle: { text: 'Vendidos y No Vendidos'},
+            yAxis: { min: 0, title: { text: 'Cantidad'}},
+            legend: {
+                enabled: true //Leyenda de cada serie
+            },
+            credits: {
+                enabled: false //Borra la marca de agua
+            },
+            lang: { //Traducción de las funciones de exportación al español
+                printChart: 'Imprimir gráfico',
+                downloadPNG: 'Descargar en PNG',
+                downloadJPEG: 'Descargar en JPG',
+                downloadPDF: 'Descargar en PDF',
+                downloadSVG: 'Descargar en SVG',
+                contextButtonTitle: 'EXPORTAR'
+            }
+          });
 
-          //Crear intervalo de no vendidos (de 1000 en 1000)
-          var intervalNoVendidos = []
-          for(var i = 1000; i <= largestNoVendidos; i+= 1000){
-            intervalNoVendidos.push(i);
-          }
+          //Añadir series dinámicamente
+          $('#container').ready(function(){
+            //Ciclo While para recargar el gráfico
+           while(chart.series.length > 0){
+               chart.series[0].remove(true);
+           }
+           for(var i = 0; i < vendido.length; i++){
+              //Añadir series
+              chart.addSeries({
+                  name: vendido[i].price + '$',
+                  data: [vendido[i].qty],
+                  color: '#4CAF50',
+                  allowPointSelect: true,
+                  pointRange: 100
+              });
+           }
+           for(var i = 0; i < noVendido.length; i++){
+              //Añadir series
+              chart.addSeries({
+                  name: noVendido[i].price + '$',
+                  data: [noVendido[i].qty],
+                  color: '#F44336',
+                  allowPointSelect: true,
+                  pointRange: 100
+              });
+           }
+          });
 
-          var arraySeries = [];
-          
 
           console.log('vendido', vendido);
           console.log('noVendido', noVendido);
-          console.log(intervalVendidos);
-          console.log(intervalNoVendidos);
         }
 
 
