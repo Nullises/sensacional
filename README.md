@@ -16,11 +16,14 @@
 
 4. Cambiar variables locales de la DB en `\server\config`
 
-5. Dentro de /server correr
+5. Instalación de Base de Datos  
 
-`sequelize db:migrate` //Migrar la DB
+-Tener instalado Postgres versión 9.5 o superior
 
-`sequelize db:seed:all` //Poblar la DB
+-Crear base de datos vacía llamada "sensacional"
+
+-Clic derecho, "Restore", apuntar a la carpeta backup
+
 
 6. Correr la app en raíz (/sensacional)
 

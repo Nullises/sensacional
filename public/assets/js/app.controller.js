@@ -90,7 +90,7 @@
 
           //Verificar si la data está vendida o no
           var mapQty = data.map(function(x){
-            if(x.qty != 0){
+            if(x.qty != 0 && x.price >= 1000){
               vendidoQty.push(x.qty)
             }else{
               noVendidoQty.push(x.qty);
@@ -127,18 +127,13 @@
               if($.inArray(el, uniqueCategoriesActual) === -1) uniqueCategoriesActual.push(el);
           });
 
-          //Evitar duplicados en Categorias
-          var categories = vendidoPrice.concat(noVendidoPrice);
-          var uniqueCategories = [];
-          $.each(categories, function(i, el){
-              if($.inArray(el, uniqueCategories) === -1) uniqueCategories.push(el);
-          });
+          var categories = [1000000];
 
-          fillChart(uniqueCategories, uniqueCategoriesActual, vendidoQty, noVendidoQty);
+          fillChart(categories, uniqueCategoriesActual, vendidoQty, noVendidoQty);
         }
 
         //Función que renderiza el gráfico
-        function fillChart(uniqueCategories, uniqueCategoriesActual, vendidoQty, noVendidoQty){
+        function fillChart(categories, uniqueCategoriesActual, vendidoQty, noVendidoQty){
           $scope.isChartAvailable = true;
           //Highcharts
           var chart = Highcharts.chart('container', {
@@ -146,7 +141,7 @@
             title: { text: 'Cantidad de Productos'},
             subtitle: { text: 'Vendidos y No Vendidos'},
             yAxis: { min: 0, title: { text: 'Cantidad'}},
-            xAxis: {categories: uniqueCategories},
+            xAxis: {categories: categories, tickInterval: 1000},
             legend: {
                 enabled: true //Leyenda de cada serie
             },
