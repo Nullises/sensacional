@@ -68,13 +68,13 @@
             var replaceSlash = str.replace(/\//g, "%2F")
             getProductAnd.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
-              fillTable(data.data);
+              fillMainTable(data.data);
               purgeData(data.data);
             });
           }else{
             getProductOr.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
-              fillTable(data.data);
+              fillMainTable(data.data);
               purgeData(data.data);
             });
           }
@@ -101,11 +101,10 @@
 
           var mapPrice = data.map(function(x){
             let p = Math.round(x.price/1000)*1000
-            let p2 = p*2;
-            if(p2 != 0){
-              vendidoPrice.push(p2)
+            if(p != 0){
+              vendidoPrice.push(p)
             }else{
-              noVendidoPrice.push(p2);
+              noVendidoPrice.push(p);
             }
           });
 
@@ -133,6 +132,11 @@
               if($.inArray(el, uniqueCategories) === -1) uniqueCategories.push(el);
           });
 
+          fillChart(uniqueCategories, uniqueCategoriesActual, vendidoQty, noVendidoQty);
+        }
+
+        //Función que renderiza el gráfico
+        function fillChart(uniqueCategories, uniqueCategoriesActual, vendidoQty, noVendidoQty){
           //Highcharts
           var chart = Highcharts.chart('container', {
             chart:{ type: 'column'},
@@ -162,7 +166,6 @@
                             click: function () {
                                 $('#miModal').modal();
                                 var current = this.category;
-                                console.log('current:' + current);
                                 function findPrevious(el){
                                   if(el <= current){
                                     return el;
@@ -170,9 +173,8 @@
                                 }
                                 var menores = uniqueCategoriesActual.filter(findPrevious);
                                 var previous = menores[menores.length -1];
-                                console.log(previous);
                                 getProductBetween.respuesta(previous, current).then(function(data){
-                                  console.log(data.data);
+                                  fillModalTable(current, data.data);
                                 });
                             }
                         }
@@ -194,8 +196,8 @@
           });
         }
 
-        //Función que renderiza la Tabla
-        function fillTable(data){
+        //Función que renderiza la Tabla Principal
+        function fillMainTable(data){
           $document.ready(function(){
             //Tabla
             var table = $('#sensacional_table').DataTable({
@@ -234,5 +236,48 @@
           });
         }
 
+        //Función que renderiza la tabla del Modal
+        function fillModalTable(current, data){
+          console.log(current);
+          console.log(data);
+
+          $document.ready(function(){
+            //Tabla
+            var table = $('#modal_table').DataTable({
+              data: data,
+              dom: 'Bfrtip',
+              destroy: true,
+              "order": [[ 5, "desc" ]], //Ordenado por Precio de Venta (descendente)
+              "language": {
+                  "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+              },
+              buttons: [ 'excel', 'pdf'],
+              "columns":[
+                {"data": "url_miniature", render: function(url, type, full){return '<img src="http://www.sensacional.cl/media/catalog/product/cache/1/thumbnail/65x/040ec09b1e35df139433887a97daa66f'+full.img+'"/>';}},
+                {"data": "sku"},
+                {"data": "name"},
+                {"data": "condition"},
+                {"data": "price_ref", render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                {"data": "price", render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                {"data": "status", render: function(data, type, row){if(data==true){return 'Sí'}else{return 'No'}}},
+                {"data": "qty"}
+              ],
+            });
+            //Búsqueda Individual (Filtro x Columna)
+            $("#modal_table tfoot th").each( function ( i ) {
+                var select = $('<select><option value=""></option></select>')
+                .appendTo( $(this).empty() )
+                .on( 'change', function () {
+                    table.column( i )
+                        .search( $(this).val() )
+                        .draw();
+                } );
+                table.column( i ).data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                });
+            });
+
+          });
+        }
     }
 })();
