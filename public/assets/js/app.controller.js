@@ -9,6 +9,8 @@
 
     function SensacionalController ($scope, $timeout, getAll, getProductOr, getProductAnd, getProductBetween ,$document) {
 
+        $scope.isChartAvailable = false;
+
         //Toda la data (asíncrona)
         getAll.respuesta().then(function(data){
           let allData = data.data;
@@ -137,6 +139,7 @@
 
         //Función que renderiza el gráfico
         function fillChart(uniqueCategories, uniqueCategoriesActual, vendidoQty, noVendidoQty){
+          $scope.isChartAvailable = true;
           //Highcharts
           var chart = Highcharts.chart('container', {
             chart:{ type: 'column'},
