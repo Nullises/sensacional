@@ -5,9 +5,9 @@
         .module('SensacionalApp')
         .controller('SensacionalController', SensacionalController);
 
-    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr', 'getProductAnd', '$document'];
+    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr', 'getProductAnd', 'getProductBetween' , '$document'];
 
-    function SensacionalController ($scope, $timeout, getAll, getProductOr, getProductAnd, $document) {
+    function SensacionalController ($scope, $timeout, getAll, getProductOr, getProductAnd, getProductBetween ,$document) {
 
         //Toda la data (asíncrona)
         getAll.respuesta().then(function(data){
@@ -171,6 +171,9 @@
                                 var menores = uniqueCategoriesActual.filter(findPrevious);
                                 var previous = menores[menores.length -1];
                                 console.log(previous);
+                                getProductBetween.respuesta(previous, current).then(function(data){
+                                  console.log(data.data);
+                                });
                             }
                         }
                     }
