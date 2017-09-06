@@ -62,6 +62,19 @@ router.get('/getProductAnd/:condition/:brand/:name/:categories', function(req, r
   })
 });
 
+//Obtener todos los productos (BETWEEN)
+router.get('/getProductBetween/:low/:high', function(req, res){
+  models.product.findAll({
+    where: {
+      price: {
+        $between: [req.params.low, req.params.high]
+      }
+    }
+  }).then(function(getProductBetween){
+    res.json(getProductBetween)
+  })
+});
+
 //Comprobar conexión a DB
 models.sequelize.authenticate().then(function(err) {
     console.log('La conexión a Base de Datos se ha establecido correctamente');

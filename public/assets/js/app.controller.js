@@ -101,11 +101,29 @@
 
           var mapPrice = data.map(function(x){
             let p = Math.round(x.price/1000)*1000
-            if(p != 0){
-              vendidoPrice.push(p)
+            let p2 = p*2;
+            if(p2 != 0){
+              vendidoPrice.push(p2)
             }else{
-              noVendidoPrice.push(p);
+              noVendidoPrice.push(p2);
             }
+          });
+
+          var vendidoActualPrice = [];
+          var noVendidoActualPrice = [];
+
+          var mapActualPrice = data.map(function(x){
+            if(x.price != 0){
+              vendidoActualPrice.push(x.price)
+            }else{
+              noVendidoActualPrice.push(x.price);
+            }
+          });
+
+          var categoriesActual = vendidoActualPrice.concat(noVendidoActualPrice);
+          var uniqueCategoriesActual = [];
+          $.each(categoriesActual, function(i, el){
+              if($.inArray(el, uniqueCategoriesActual) === -1) uniqueCategoriesActual.push(el);
           });
 
           //Evitar duplicados en Categorias
@@ -143,6 +161,16 @@
                         events: {
                             click: function () {
                                 $('#miModal').modal();
+                                var current = this.category;
+                                console.log('current:' + current);
+                                function findPrevious(el){
+                                  if(el <= current){
+                                    return el;
+                                  }
+                                }
+                                var menores = uniqueCategoriesActual.filter(findPrevious);
+                                var previous = menores[menores.length -1];
+                                console.log(previous);
                             }
                         }
                     }
