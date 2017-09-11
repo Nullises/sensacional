@@ -56,7 +56,7 @@
           //Parámetros de Búsqueda
           $scope.availableSearchParams = [
             { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto"},
-            { key: "brand", name: "Marca", placeholder: "Marca" },
+            { key: "brand", name: "Marca", placeholder: "Marca"},
             { key: "condition", name: "Condición", placeholder: "Condición"},
             { key: "categories", name: "Categorias", placeholder: "Categorias"},
           ];
