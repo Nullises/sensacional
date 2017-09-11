@@ -55,10 +55,10 @@
 
           //Parámetros de Búsqueda
           $scope.availableSearchParams = [
-            { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto", restrictToSuggestedValues: true, suggestedValues: uniqueNames},
-            { key: "brand", name: "Marca", placeholder: "Marca", restrictToSuggestedValues: true, suggestedValues: uniqueBrands },
-            { key: "condition", name: "Condición", placeholder: "Condición", restrictToSuggestedValues: true, suggestedValues: uniqueCondition},
-            { key: "categories", name: "Categorias", placeholder: "Categorias", restrictToSuggestedValues: true, suggestedValues: uniqueCategories},
+            { key: "name", name: "Nombre del producto", placeholder: "Nombre del producto"},
+            { key: "brand", name: "Marca", placeholder: "Marca" },
+            { key: "condition", name: "Condición", placeholder: "Condición"},
+            { key: "categories", name: "Categorias", placeholder: "Categorias"},
           ];
 
         });
