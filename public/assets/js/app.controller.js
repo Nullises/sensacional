@@ -5,9 +5,11 @@
         .module('SensacionalApp')
         .controller('SensacionalController', SensacionalController);
 
-    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr', 'getProductAnd', '$document'];
+    SensacionalController.$inject = ['$scope', '$timeout', 'getAll', 'getProductOr', 'getProductAnd', 'getProductBetween' , '$document'];
 
-    function SensacionalController ($scope, $timeout, getAll, getProductOr, getProductAnd, $document) {
+    function SensacionalController ($scope, $timeout, getAll, getProductOr, getProductAnd, getProductBetween ,$document) {
+
+        $scope.isChartAvailable = false;
 
         //Toda la data (asíncrona)
         getAll.respuesta().then(function(data){
@@ -68,13 +70,13 @@
             var replaceSlash = str.replace(/\//g, "%2F")
             getProductAnd.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
-              fillTable(data.data);
+              fillMainTable(data.data);
               purgeData(data.data);
             });
           }else{
             getProductOr.respuesta(model.condition, model.brand, model.name, replaceSlash)
             .then(function(data){
-              fillTable(data.data);
+              fillMainTable(data.data);
               purgeData(data.data);
             });
           }
@@ -83,38 +85,63 @@
         //Función que depura la data para el gráfico
         function purgeData(data){
 
-          var vendido = []; //verde
-          var noVendido = []; //rojo
+          var vendidoQty = []; //verde
+          var noVendidoQty = []; //rojo
 
           //Verificar si la data está vendida o no
           var mapQty = data.map(function(x){
-            if(x.qty != 0){
-              vendido.push(x)
+            if(x.qty != 0 && x.price >= 1000){
+              vendidoQty.push(x.qty)
             }else{
-              noVendido.push(x);
+              noVendidoQty.push(x.qty);
             }
           });
 
-          //Redondear precio de vendidos
-          var roundPriceVendido = vendido.map(function(x){
-            let price = Math.round(x.price/1000)*1000
-            return price;
+          var vendidoPrice = [];
+          var noVendidoPrice = [];
+
+
+          var mapPrice = data.map(function(x){
+            let p = Math.round(x.price/1000)*1000
+            if(p != 0){
+              vendidoPrice.push(p)
+            }else{
+              noVendidoPrice.push(p);
+            }
           });
 
-          //Redondear precio de no vendidos
-          var roundPriceNoVendido = noVendido.map(function(x){
-            let price = Math.round(x.price/1000)*1000
-            return price;
+          var vendidoActualPrice = [];
+          var noVendidoActualPrice = [];
+
+          var mapActualPrice = data.map(function(x){
+            if(x.price != 0){
+              vendidoActualPrice.push(x.price)
+            }else{
+              noVendidoActualPrice.push(x.price);
+            }
           });
 
-          console.log(roundPriceVendido);
+          var categoriesActual = vendidoActualPrice.concat(noVendidoActualPrice);
+          var uniqueCategoriesActual = [];
+          $.each(categoriesActual, function(i, el){
+              if($.inArray(el, uniqueCategoriesActual) === -1) uniqueCategoriesActual.push(el);
+          });
 
+          var categories = [1000000];
+
+          fillChart(categories, uniqueCategoriesActual, vendidoQty, noVendidoQty);
+        }
+
+        //Función que renderiza el gráfico
+        function fillChart(categories, uniqueCategoriesActual, vendidoQty, noVendidoQty){
+          $scope.isChartAvailable = true;
           //Highcharts
           var chart = Highcharts.chart('container', {
             chart:{ type: 'column'},
             title: { text: 'Cantidad de Productos'},
             subtitle: { text: 'Vendidos y No Vendidos'},
             yAxis: { min: 0, title: { text: 'Cantidad'}},
+            xAxis: {categories: categories, tickInterval: 1000},
             legend: {
                 enabled: true //Leyenda de cada serie
             },
@@ -128,48 +155,47 @@
                 downloadPDF: 'Descargar en PDF',
                 downloadSVG: 'Descargar en SVG',
                 contextButtonTitle: 'EXPORTAR'
-            }
+            },
+                plotOptions: {
+                series: {
+                    cursor: 'pointer',
+                    point: {
+                        events: {
+                            click: function () {
+                                $('#miModal').modal();
+                                var current = this.category;
+                                function findPrevious(el){
+                                  if(el <= current){
+                                    return el;
+                                  }
+                                }
+                                var menores = uniqueCategoriesActual.filter(findPrevious);
+                                var previous = menores[menores.length -1];
+                                getProductBetween.respuesta(previous, current).then(function(data){
+                                  fillModalTable(current, data.data);
+                                });
+                            }
+                        }
+                    }
+                }
+            },
+            series: [
+              {
+                name: 'Vendidos',
+                data: vendidoQty,
+                color: '#4CAF50'
+              },
+              {
+                name: 'No Vendidos',
+                data: noVendidoQty,
+                color: '#F44336  '
+              }
+            ]
           });
-
-          //Añadir series dinámicamente
-          $('#container').ready(function(){
-            //Ciclo While para recargar el gráfico
-           while(chart.series.length > 0){
-               chart.series[0].remove(true);
-           }
-           for(var i = 0; i < vendido.length; i++){
-              //Añadir series
-              chart.addSeries({
-                  name: vendido[i].price + '$',
-                  data: [vendido[i].qty],
-                  color: '#4CAF50',
-                  allowPointSelect: true,
-                  pointRange: 100
-              });
-           }
-           for(var i = 0; i < noVendido.length; i++){
-              //Añadir series
-              chart.addSeries({
-                  name: noVendido[i].price + '$',
-                  data: [noVendido[i].qty],
-                  color: '#F44336',
-                  allowPointSelect: true,
-                  pointRange: 100
-              });
-           }
-          });
-
-
-          console.log('vendido', vendido);
-          console.log('noVendido', noVendido);
         }
 
-
-
-
-
-        //Función que renderiza la Tabla
-        function fillTable(data){
+        //Función que renderiza la Tabla Principal
+        function fillMainTable(data){
           $document.ready(function(){
             //Tabla
             var table = $('#sensacional_table').DataTable({
@@ -208,5 +234,48 @@
           });
         }
 
+        //Función que renderiza la tabla del Modal
+        function fillModalTable(current, data){
+          console.log(current);
+          console.log(data);
+
+          $document.ready(function(){
+            //Tabla
+            var table = $('#modal_table').DataTable({
+              data: data,
+              dom: 'Bfrtip',
+              destroy: true,
+              "order": [[ 5, "desc" ]], //Ordenado por Precio de Venta (descendente)
+              "language": {
+                  "url": "https://cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
+              },
+              buttons: [ 'excel', 'pdf'],
+              "columns":[
+                {"data": "url_miniature", render: function(url, type, full){return '<img src="http://www.sensacional.cl/media/catalog/product/cache/1/thumbnail/65x/040ec09b1e35df139433887a97daa66f'+full.img+'"/>';}},
+                {"data": "sku"},
+                {"data": "name"},
+                {"data": "condition"},
+                {"data": "price_ref", render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                {"data": "price", render: $.fn.dataTable.render.number( ',', '.', 2, '$' )},
+                {"data": "status", render: function(data, type, row){if(data==true){return 'Sí'}else{return 'No'}}},
+                {"data": "qty"}
+              ],
+            });
+            //Búsqueda Individual (Filtro x Columna)
+            $("#modal_table tfoot th").each( function ( i ) {
+                var select = $('<select><option value=""></option></select>')
+                .appendTo( $(this).empty() )
+                .on( 'change', function () {
+                    table.column( i )
+                        .search( $(this).val() )
+                        .draw();
+                } );
+                table.column( i ).data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                });
+            });
+
+          });
+        }
     }
 })();
